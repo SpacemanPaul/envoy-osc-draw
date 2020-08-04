@@ -67,6 +67,49 @@ sinewaves_new = {
 	]
 }
 
+def multiband_callback(x, resolution, state, bands):
+	y = 0.0
+	for band in bands:
+		period, amplitude, phase = band
+		y += sine_callback(x, resolution, state, period=period, amplitude=amplitude, phase=phase)
+	return y
+
+def multiband_animator(state):
+	return [
+		(
+		1, animate_keyvals((
+			(0, 0.0),
+			(5, 0.5),
+			(15, 0.2),
+			(25, 0.4),
+			(35, 0.2),
+			(45, 0.42),
+			(55, 0.13),
+			(70, 0.22),
+			(80, 0.47),
+			(90, 0.1),
+			(100, 0.3),
+		), state), 0.0
+		)
+	]
+
+
+multiband_something = {
+	"functions": [
+		{
+			"function": multiband_callback,
+			"parameters": {
+				"bands": multiband_animator,
+			},
+			"colour": [66, 255, 112],
+			"width": "4px",
+			"glow": True,
+			"glow_scale": 9,
+			"glow_color": [66, 219, 112]
+		}
+	]
+}
+
 def expanding_centre_throb_pts(state):
 	delta = animate_keyvals((
 		(0, 0.0),
@@ -250,11 +293,10 @@ sinewaves2 = {
 	]
 }
 
-another_bit = {
+multiband = {
 	"resolution" : [ 1920, 1080 ],
-	"frames": 50,
+	"frames": 100,
 	"output": {
-		"basename": "out_",
 		"extname": "png",
 		"width": 5,
 		"format": "PNG"
@@ -279,12 +321,7 @@ another_bit = {
 		},
 		{
 			"type": "anim",
-			"anim": starting_throb,
-			"mode": "alpha"
-		},
-		{
-			"type": "anim",
-			"anim": expanding_line,
+			"anim": multiband_something,
 			"mode": "alpha"
 		},
 		{
@@ -324,4 +361,4 @@ start_throb = {
 	]
 }
 
-render = start_throb
+render = multiband

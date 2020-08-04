@@ -128,6 +128,7 @@ class FunctionDraw(BaseDraw):
         adraw.line(points, pen)
         adraw.flush()
 
+
 class Trig(BaseDraw):
     def __init__(self, data, resolution):
         super().__init__(data, resolution);

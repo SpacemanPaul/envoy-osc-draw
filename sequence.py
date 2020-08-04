@@ -7,7 +7,6 @@ class Sequence:
   def __init__(self, data):
     self.resolution = data['resolution']
     self.frames = data['frames']
-    self.basename = data['output']['basename']
     self.width = data['output']['width']
     self.extname = data['output']['extname']
     self.format = data['output']['format']
@@ -30,7 +29,7 @@ class Sequence:
     locals = {
       'frame': frame,
       'frames': self.frames,
-      'frame_p': frame/( 1 if self.frames == 1 else self.frames-1)
+      'frame_p': frame/(1 if self.frames == 1 else self.frames-1)
     }
     base_img = None
     for layer in self.layers:
@@ -48,14 +47,14 @@ class Sequence:
           base_img = Image.alpha_composite(base_img,layer_img)
     return base_img
 
-  def render(self,first,last):
+  def render(self,first,last, base):
     first = 0 if first is None else first
     last = self.frames if last is None else last
     count = last-first
     for f in range(first,last):
       print('{}/{}'.format(f+1-first,count))
-      self.save_image(self.draw(f),f)
+      self.save_image(self.draw(f),f, base)
 
 
-  def save_image(self, im, frame):
-    im.save('{base}{frame:0{width}}.{ext}'.format(base=self.basename,frame=frame,width=self.width,ext=self.extname),self.format)
+  def save_image(self, im, frame, base):
+    im.save('{base}_{frame:0{width}}.{ext}'.format(base=base,frame=frame,width=self.width,ext=self.extname),self.format)

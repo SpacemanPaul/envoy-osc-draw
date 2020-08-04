@@ -23,10 +23,10 @@ def import_data(path):
 
 def run(args, data=None):
   try:
-    path,first,last = args
+    path,first,last,base = args
     if not data:
       data = import_data(path)
-    Sequence(data).render(first, last)
+    Sequence(data).render(first, last, base)
   except KeyboardInterrupt:
     return
   except Exception as e:
@@ -52,7 +52,6 @@ def main(argv):
     print ("Cleaning old pngs...", end="")
     os.system(f"rm {options.out}*.png")
     if options.ffmpeg:
-      print("Cleaning old movie file...", end="")
       os.system(f"rm {options.out}_movie.mp4")
 
     print (" Done")
@@ -81,7 +80,7 @@ def main(argv):
     for f in range(0, pool_size):
       start = f*count
       end = start + count
-      jobs.append([options.python,start,end if end < frames else frames ])
+      jobs.append([options.python,start,end,options.out if end < frames else frames ])
 
     if pool_size == 1:
       run(jobs[0], data=data)
