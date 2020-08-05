@@ -55,7 +55,7 @@ def main(argv):
       os.system(f"rm {options.out}_movie.mp4")
 
     print (" Done")
-    if not options.python or not options.ffmpeg:
+    if not options.python and not options.ffmpeg:
       return 0
 
   if options.python:
@@ -80,7 +80,7 @@ def main(argv):
     for f in range(0, pool_size):
       start = f*count
       end = start + count
-      jobs.append([options.python,start,end,options.out if end < frames else frames ])
+      jobs.append([options.python,start,end if end < frames else frames, options.out ])
 
     if pool_size == 1:
       run(jobs[0], data=data)
